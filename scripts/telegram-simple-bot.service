@@ -10,6 +10,6 @@ Group=root
 
 Type=simple
 
-ExecStart=java -jar /opt/bots/tg/telegram-simple-bot.jar
+ExecStart=java -jar /home/ec2-user/telegram-simple-bot.jar
 [Install]
 WantedBy=multi-user.target

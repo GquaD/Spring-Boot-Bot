@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>Spring-Boot-Bot</artifactId>
+	<artifactId>spring-boot-bot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Spring-Boot-Bot</name>
+	<name>spring-boot-bot</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
