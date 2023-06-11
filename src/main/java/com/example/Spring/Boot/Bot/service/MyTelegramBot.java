@@ -3,6 +3,7 @@ package com.example.Spring.Boot.Bot.service;
 import com.example.Spring.Boot.Bot.config.BotConfig;
 import com.example.Spring.Boot.Bot.model.User;
 import com.example.Spring.Boot.Bot.model.UserRepository;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -124,7 +125,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     }
 
     private void startCommandReceived(long chatId, String firstName) {
-        String answer = "Hi, " + firstName + "!\nNice to meet you!";
+        String answer = EmojiParser.parseToUnicode("Hi, " + firstName + "!\nNice to meet you! \uD83D\uDE0A");
         log.info("Replied to user: " + answer);
         sendMessage(chatId, answer);
     }
