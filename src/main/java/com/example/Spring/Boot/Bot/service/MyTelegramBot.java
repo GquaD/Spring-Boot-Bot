@@ -15,6 +15,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
@@ -130,11 +132,32 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, answer);
     }
 
+    private ReplyKeyboardMarkup generateKeyboard() {
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
+        List<KeyboardRow> listRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+        row.add("weather");
+        row.add("get random joke");
+        listRows.add(row);
+
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add("register");
+        row1.add("check my data");
+        row1.add("delete my data");
+        listRows.add(row1);
+
+        markup.setKeyboard(listRows);
+
+        return markup;
+    }
+
     private void sendMessage(long chatId, String textToSend) {
         SendMessage send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
         send.setText(textToSend);
-        ;
+
+        send.setReplyMarkup(generateKeyboard());
 
         try {
             execute(send);
