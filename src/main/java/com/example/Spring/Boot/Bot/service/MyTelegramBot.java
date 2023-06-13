@@ -67,29 +67,39 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText(), firstName = update.getMessage().getChat().getFirstName();
             long chatId = update.getMessage().getChatId();
 
-            switch (messageText) {
-                case "/start":
-                    registerUser(update.getMessage());
-                    startCommandReceived(chatId, firstName);
-                    break;
-                case "/mydata":
-                    myDataCommandReceived(chatId, update.getMessage().getChat());
-                    break;
-                case "/deletedata":
-                    deleteDataCommandReceived(chatId, firstName);
-                    break;
-                case "/help":
-                    helpCommandReceived(chatId, firstName);
-                    break;
-                case "/settings":
-                    settingsCommandReceived(chatId, firstName);
-                    break;
-                case "/register":
-                    registerTriggered(chatId);
-                    break;
-                default:
-                    sendMessage(chatId, "Sorry, the command is not recognized.");
+            if (messageText.contains("/send") && config.getOwnerId() == chatId) {
+                var text = EmojiParser.parseToUnicode(messageText.substring(messageText.indexOf(" ")));
+                var users = userRepository.findAll();
+                for (User user : users) {
+                    sendMessage(user.getChatId(), text);
+                }
+            } else {
+
+                switch (messageText) {
+                    case "/start":
+                        registerUser(update.getMessage());
+                        startCommandReceived(chatId, firstName);
+                        break;
+                    case "/mydata":
+                        myDataCommandReceived(chatId, update.getMessage().getChat());
+                        break;
+                    case "/deletedata":
+                        deleteDataCommandReceived(chatId, firstName);
+                        break;
+                    case "/help":
+                        helpCommandReceived(chatId, firstName);
+                        break;
+                    case "/settings":
+                        settingsCommandReceived(chatId, firstName);
+                        break;
+                    case "/register":
+                        registerTriggered(chatId);
+                        break;
+                    default:
+                        sendMessage(chatId, "Sorry, the command is not recognized.");
+                }
             }
+
         } else if (update.hasCallbackQuery()) {
             int messageId = update.getCallbackQuery().getMessage().getMessageId();
             long chatId = update.getCallbackQuery().getMessage().getChatId();
