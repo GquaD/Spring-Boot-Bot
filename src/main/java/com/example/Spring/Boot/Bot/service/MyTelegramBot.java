@@ -67,7 +67,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText(), firstName = update.getMessage().getChat().getFirstName();
-            long chatId = update.getMessage().getChatId();
+            long chatId = update.getMessage().getFrom().getId();
 
             if (messageText.contains("/send") && config.getOwnerId() == chatId) {
                 var text = EmojiParser.parseToUnicode(messageText.substring(messageText.indexOf(" ")));
