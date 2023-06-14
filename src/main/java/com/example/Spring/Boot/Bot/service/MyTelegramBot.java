@@ -1,11 +1,14 @@
 package com.example.Spring.Boot.Bot.service;
 
 import com.example.Spring.Boot.Bot.config.BotConfig;
+import com.example.Spring.Boot.Bot.model.Ads;
+import com.example.Spring.Boot.Bot.model.AdsRepository;
 import com.example.Spring.Boot.Bot.model.User;
 import com.example.Spring.Boot.Bot.model.UserRepository;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -37,6 +40,9 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     private static final String ERROR_TEXT = "Error occured on sending message: ";
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AdsRepository adsRepository;
 
     @Autowired
     final BotConfig config;
@@ -256,6 +262,18 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             log.error(ERROR_TEXT + e.getMessage());
+        }
+    }
+
+    @Scheduled(cron = "${bot.cron.scheduler}")
+    private void sendAds() {
+        var ads = adsRepository.findAll();
+        var users = userRepository.findAll();
+        for (Ads ad : ads) {
+            for (User user : users) {
+                sendMessageNoKeyboard(user.getChatId(), ad.getAd());
+                //todo delete user from list or the message after once sent
+            }
         }
     }
 }
